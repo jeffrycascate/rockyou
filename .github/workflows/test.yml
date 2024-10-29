@@ -10,7 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -28,13 +27,19 @@ jobs:
         run: |
           echo "${{ secrets.VPN_USERNAME }}" > auth.txt
           echo "${{ secrets.VPN_PASSWORD }}" >> auth.txt
-          chmod 600 auth.txt
+          chmod 600 auth.txt 
+          cat auth.txt 
+   
+      - name: Read authentication file
+        run: |
+            cat auth.txt 
+    
   
       - name: Update OpenVPN config to use auth file
         run: echo "auth-user-pass auth.txt" >> vpn-config.ovpn
   
       - name: Start OpenVPN
-        run: sudo openvpn --config vpn-config.ovpn  --daemon --verb 3 --log-append /dev/null
+        run: sudo openvpn --config vpn-config.ovpn  --daemon --verb 3
 
   
       - name: Verificar conexión VPN (IP pública)
